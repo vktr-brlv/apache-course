@@ -6,7 +6,7 @@
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure(2) do |config|
-  config.vm.box = "bento/centos-6.7"
+  config.vm.box = "chef/centos-6.5"
 
   # config.vm.network "forwarded_port", guest: 80, host: 8080
 
@@ -22,6 +22,9 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: <<-SHELL
     sudo yum update
     sudo yum install -y --nogpgcheck epel-release
-    sudo yum install -y --nogpgcheck puppet
+    sudo yum install -y --nogpgcheck puppet rubygems
+    sudo puppet apply /etc/puppet/manifests/wordpress.pp
+    sudo cp -r /vagrant/wordpress /var/www/html/
+    ip addr show eth1
   SHELL
 end
